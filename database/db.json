@@ -1,0 +1,71 @@
+{
+  "users": [
+    {
+      "nama_lengkap": "kebon",
+      "email": "kebon@gmail.com",
+      "password": "kebon",
+      "saldo": 1000000,
+      "point": 0,
+      "id": 1
+    },
+    {
+      "nama_lengkap": "Rafansa Oktaviano",
+      "email": "ravansaoktaviano@gmail.com",
+      "password": "asddsa",
+      "saldo": 190000,
+      "point": 0,
+      "id": 2
+    }
+  ],
+  "events": [
+    {
+      "nama_event": "AOT EXHIBITION",
+      "kategori_event": "Anime",
+      "date": "2023-08-09",
+      "time": "03:50",
+      "kota": "CIMAHI CITY",
+      "detail_lokasi": "Batu jajar",
+      "jenis_event": "Offline",
+      "biaya": "0",
+      "image_link": "https://s-light.tiket.photos/t/01E25EBZS3W0FY9GTG6C42E1SE/platform-mweb-high/events/2023/06/01/71d27e86-e401-455e-ad8a-77e3191fd3ea-1685625489373-57a70c10edcaf69e81f53ce09f6d0b09.jpg",
+      "max_peserta": "20",
+      "deskripsi_detail": "Attack on Titan is a popular Japanese manga series written and illustrated by Hajime Isayama. The series is set in a world where humanity resides within enormous walled cities to protect themselves from gigantic humanoid creatures known as Titans. The story follows the struggles of Eren Yeager, his adoptive sister Mikasa Ackerman, and their friend Armin Arlert as they join the military to fight against the Titans after their hometown is destroyed and Eren's mother is killed by a Titan. The series delves into themes of survival, freedom, sacrifice, and the complexities of human nature. As the story unfolds, the characters uncover dark secrets about the Titans, their origins, and the true nature of the world they inhabit. Attack on Titan gained immense popularity for its intense action sequences, intricate plot, and character development. It has been praised for its thought-provoking themes and exploration of moral dilemmas in the face of despair. The manga has been adapted into an anime series that has garnered a massive global fanbase.The franchise has also sparked discussions about societal issues, government control, and the consequences of warfare. Its impact on pop culture and its influence on other media forms have made Attack on Titan a significant and memorable work in the world of manga and anime",
+      "deskripsi_singkat": "It is set in a world where humanity is forced to live in cities surrounded by three enormous walls",
+      "discount": 10,
+      "id": 2
+    },
+    {
+      "nama_event": "ONE OK ROCKS",
+      "kategori_event": "Music",
+      "date": "2023-08-10",
+      "time": "12:00",
+      "kota": "Jakarta International Stadium",
+      "detail_lokasi": "North Jakarta City, Indonesia",
+      "jenis_event": "Online",
+      "biaya": "300000",
+      "image_link": "https://media.bandsintown.com/300x300/15017846.webp",
+      "max_peserta": 999,
+      "deskripsi_detail": "ONE OK ROCK is a renowned Japanese rock band that was formed in 2005. The band consists of four talented members: Taka (vocals), Toru (guitar), Ryota (bass), and Tomoya (drums). Originally starting as a five-piece group, guitarist Alex left the band in 2009. Known for their dynamic sound, powerful performances, and emotionally charged lyrics, ONE OK ROCK has gained a massive following both in Japan and internationally. Their music seamlessly blends elements of rock, pop, alternative, and post-hardcore, creating a unique and captivating sonic experience. Over the years, ONE OK ROCK has showcased their versatility through various musical styles, experimenting with different genres while maintaining a distinct identity. Taka's soulful vocals, combined with the band's energetic instrumentals, have led to the creation of anthemic tracks that resonate deeply with fans ONE OK ROCK's journey in the music industry has been marked by significant achievements. They were managed by the talent agency Amuse and were associated with the record label A-Sketch until 2021. In a bold move, the band gained independence and founded their own label, 10969 Inc., which reflects their determination to shape their artistic direction.The band's powerful live performances have earned them a reputation as a must-see act, whether in intimate club shows or large-scale stadium concerts. Their ability to connect with audiences through their music's emotional depth and relatable themes has solidified their status as one of the leading rock bands of their generation.",
+      "deskripsi_singkat": "ONE OK ROCK is a Japanese rock band formed in 2005, composed of Taka, Toru, Ryota, and Tomoya.",
+      "discount": 15,
+      "id": 3
+    }
+  ],
+  "cetak_tiket": [
+    {
+      "id": 1,
+      "userId": 1,
+      "eventId": 1,
+      "kode_referal": 12345
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "eventId": 1,
+      "userId": 1,
+      "comment": "lorem ipsum bla bla bla",
+      "rate": 4
+    }
+  ]
+}
