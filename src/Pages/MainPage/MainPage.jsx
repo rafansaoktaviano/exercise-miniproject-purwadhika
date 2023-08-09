@@ -4,6 +4,7 @@ import Carousell from "../../Components/Carousell/Carousell";
 import { useNavigate } from "react-router-dom";
 import Cards from "../../Components/Card/Card";
 import axios from "axios";
+
 const MainPage = () => {
   const [dataEvent, setDataEvent] = useState([]);
   const navigate = useNavigate();

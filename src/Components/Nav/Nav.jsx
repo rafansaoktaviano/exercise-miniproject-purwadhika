@@ -4,16 +4,16 @@ import { Button, Navbar } from "flowbite-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 export default function NavbarWithCTAButton(props) {
-  useEffect(() => {
-    
-  })
+  useEffect(() => {});
   return (
     <div className="px-[100px] ">
       <Navbar fluid rounded>
         <Navbar.Brand>
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            EVENTS
-          </span>
+          <Link to="/">
+            <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+              EVENTS
+            </span>
+          </Link>
         </Navbar.Brand>
 
         <div className="flex md:order-2 gap-[30px] items-center">
@@ -37,22 +37,21 @@ export default function NavbarWithCTAButton(props) {
 
         <Navbar.Toggle />
         <Navbar.Collapse>
-        {props.orang ? (
-
-              <div>
-                <h1 onClick={props.onClicks} className="cursor-pointer">Logout</h1>
-              </div>
-
-          ) : (
-            <Link to="/login">
-
-            </Link>
-          )}
+          
           <Navbar.Link active href="#">
             <Link to="/">
               <p>Home</p>
             </Link>
           </Navbar.Link>
+          {props.orang ? (
+            <div>
+              <h1 onClick={props.onClicks} className="cursor-pointer">
+                Logout
+              </h1>
+            </div>
+          ) : (
+            <Link to="/login"></Link>
+          )}
         </Navbar.Collapse>
       </Navbar>
     </div>
