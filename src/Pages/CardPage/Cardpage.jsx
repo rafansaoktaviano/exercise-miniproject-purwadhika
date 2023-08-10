@@ -8,22 +8,25 @@ import toast, { Toaster } from "react-hot-toast";
 
 const Cardpage = () => {
   const { eventId } = useParams(); // get event Id
-  const [dataEvent, setDataEvent] = useState(null); // 
-  const [dataUser, setDataUser] = useState(null); // all data user 
+  const [dataEvent, setDataEvent] = useState(null); //
+  const [dataUser, setDataUser] = useState(null); // all data user
   const [storeUser, setStoreUser] = useState(localStorage.getItem("user")); // localstorage user
-  const [newData, setNewData] = useState(null); 
-  const [btnDisable, setBtnDisable] = useState(false);
-  const [btnReff, setBtnReff] = useState(false);
-  const [reff, setReff] = useState(null);  
+  const [newData, setNewData] = useState(null); // data dari local storage
+  const [btnDisable, setBtnDisable] = useState(false); // set btn disable atau engga
+  const [btnReff, setBtnReff] = useState(false); //  set button disable atau ga pada reff btn
+  const [reff, setReff] = useState(null);
+
+  const [userTest, setUserTest] = useState(null);
+  const [sumDiscount, setSumDiscount] = useState(null);
 
   const refCodeRefferal = useRef(); // value input code Reff
 
   const getApi = async () => {
     const event = await axios.get(`http://localhost:3000/events/${eventId}`); //get  Event Id
     const dataBase = await axios.get(`http://localhost:3000/users`); // get semua database
-    const resp = await axios.get(`http://localhost:3000/users/${storeUser}`); // data user di local storage
+    const localId = await axios.get(`http://localhost:3000/users/${storeUser}`); // data user di local storage
 
-    setNewData(resp.data);
+    setNewData(localId.data);
     setDataEvent(event.data);
     setDataUser(dataBase.data);
   };
@@ -35,30 +38,48 @@ const Cardpage = () => {
   if (dataEvent === null) {
     return <h1>Loading...</h1>;
   }
-  const discountedPrice =
-    dataEvent.biaya - (dataEvent.biaya * dataEvent.discount) / 100; // Total biaya discount
-  const normalPrice = dataEvent.biaya; // normal price
+  // console.log(">>>", reff);
+  // setSumDiscount(discountedPrice)
+  console.log("BIAYA", dataEvent.biaya);
+  console.log("BIAYA DISCOUNT", sumDiscount);
+  const discountedPrice = (dataEvent.biaya * dataEvent.discount) / 100; // Total biaya discount
+  // console.log(discountedPrice);
   // handle Code Refferal
   const handleApplyRefferal = async (e) => {
     try {
-      // console.log(e);
+      setSumDiscount(discountedPrice);
       setBtnReff(true);
       const refferal = await axios.get(
+        // cari kode Ref di data base
         `http://localhost:3000/cetak_tiket?kode_referal=${e}`
       );
       setReff(refferal.data);
+
       if (refferal.data.length === 0) {
+        // klo refferal kosong
         toast.error("Refferal Invalid");
         setBtnReff(false);
       } else {
-        const applyRefferal = { ...dataEvent, biaya: discountedPrice };
+        // klo user apply refferal
 
-        const resp = await axios.put( 
-          `http://localhost:3000/events/${eventId}`,
-          applyRefferal
-        );
-        setDataEvent(resp.data);
+        // console.log("reeferal", refferal.data);
+
+        // const userss = await axios.get(
+        //   `http://localhost:3000/users/${refferal.data[0].userId}`
+        // );
+
+        // const test = { ...userss.data, point: userss.data.point + 1 };
+
+        // const res = await axios.put(
+        //   `http://localhost:3000/users/${refferal.data[0].userId}`,
+        //   test
+        // );
+
+        // console.log(res);
+
+        setSumDiscount(dataEvent.biaya - discountedPrice);
         console.log(dataEvent);
+        // console.log(response);
         toast.success("Code Refferal Applied");
       }
     } catch (error) {
@@ -73,17 +94,23 @@ const Cardpage = () => {
       const refferal1 = await axios.get(
         `http://localhost:3000/cetak_tiket?kode_referal=${e}` // get refferal code array
       );
-      console.log("Reff 1  >>>", refferal1);
-      if (!storeUser) {
+      // console.log("Reff 1  >>>", refferal1);
+      if (dataEvent.max_peserta === 0) {
+        toast.error("FULL BOOKED");
+      } else if (!storeUser && dataEvent.max_peserta > 0) {
         toast.error("Please login to buy tickets");
-      } else if (newData.biaya === "0") {
+      } else if (newData.biaya === "0" && dataEvent.max_peserta > 0) {
         // kalo biaya event free
         toast.success("Buy Success");
-      } else if (newData.saldo >= dataEvent.biaya && reff === null) {
+      } else if (
+        newData.saldo >= dataEvent.biaya &&
+        reff === null &&
+        dataEvent.max_peserta > 0
+      ) {
         // kalo reff kosong dan saldo > biaya
         const updatedUser = {
           ...newData,
-          saldo: newData.saldo - normalPrice,
+          saldo: newData.saldo - dataEvent.biaya,
         };
         const res = await axios.put(
           // update saldo user dari id
@@ -113,16 +140,21 @@ const Cardpage = () => {
 
           toast.success("Buy Success");
         }, 1000);
-      } else if (newData.saldo >= dataEvent.biaya && reff.length > 0) {
+      } else if (
+        newData.saldo >= dataEvent.biaya &&
+        reff.length > 0 &&
+        dataEvent.max_peserta > 0
+      ) {
         // klo pake code reff
-        console.log("update");
+
         const updatedUser = {
           ...newData,
-          saldo: newData.saldo - discountedPrice,
+          saldo: newData.saldo - dataEvent.biaya,
           point: newData.point + 1,
         };
 
         const res = await axios.put(
+          // ngurangin saldo dan nambah point in point by ID
           `http://localhost:3000/users/${newData.id}`,
           updatedUser
         );
@@ -133,6 +165,7 @@ const Cardpage = () => {
           max_peserta: dataEvent.max_peserta - 1,
         };
         const response = await axios.put(
+          // update max peserta
           `http://localhost:3000/events/${e}`,
           updatedParticipate
         );
@@ -148,6 +181,7 @@ const Cardpage = () => {
           getApi();
         }, 1000);
       } else if (newData.saldo <= dataEvent.biaya) {
+        // klo saldo nya kurang
         toast.error("Insufficient Saldo");
       } else {
         toast.error("Login First ");
@@ -215,14 +249,15 @@ const Cardpage = () => {
 
         <div className="mt-[50px] mb-[30px] flex justify-between items-center">
           <h1 className="text-xl">Price :</h1>
-          {dataEvent.biaya === "0" ? (
+          {dataEvent.biaya === 0 ? (
             <>
               <h1 className="text-xl">Free</h1>
             </>
           ) : (
             <div className="">
               <h1 className="text-xl text-green-600">
-                Rp. {dataEvent.biaya.toLocaleString()}
+                {reff === null ? dataEvent.biaya.toLocaleString() : sumDiscount}
+                {/* Rp. {dataEvent.biaya.toLocaleString()} */}
               </h1>
             </div>
           )}
