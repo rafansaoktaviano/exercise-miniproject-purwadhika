@@ -1,5 +1,5 @@
 import Form from "../../Components/FormGroup/Form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../Components/Button/Button";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
@@ -11,6 +11,7 @@ const SignUp = () => {
   const refFullName = useRef();
   const refEmail = useRef();
   const refPassword = useRef();
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -31,13 +32,23 @@ const SignUp = () => {
           nama_lengkap: refFullName.current.value,
           email: refEmail.current.value,
           password: refPassword.current.value,
-          saldo: 100000,
+          saldo: 1000000,
           point: 0,
         };
-
+        
         await axios.post(`http://localhost:3000/users`, { ...dataToSend });
         fetchData();
-        toast.success("Register Success!");
+        const loading =  toast.loading("Loading")
+        setTimeout(() => {
+          toast.dismiss(loading)
+          toast.success("Register Success!");
+
+
+
+        }, 1000);
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       } catch (error) {
         console.error(error);
         toast.error("An error occurred while registering.");
@@ -54,7 +65,6 @@ const SignUp = () => {
   console.log(data);
   return (
     <>
-
       <div className="flex justify-center items-center  h-screen">
         <div className="border-[2px] px-[100px] py-[50px] border-black rounded-xl">
           <h1 className="text-4xl mb-[20px]">SIGN UP</h1>

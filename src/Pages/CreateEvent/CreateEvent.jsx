@@ -47,6 +47,8 @@ const CreateEvent = () => {
         deskripsi_detail: refDescriptionDetails.current.value,
         deskripsi_singkat: refDescLil.current.value,
         discount: refDiscount.current.value,
+        userId: localStorage.getItem("user"),
+
       };
       const res = await axios.post("http://localhost:3000/events", {
         ...datas,

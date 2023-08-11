@@ -4,6 +4,8 @@ import Carousell from "../../Components/Carousell/Carousell";
 import { useNavigate } from "react-router-dom";
 import Cards from "../../Components/Card/Card";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+
 const MainPage = () => {
   const [dataEvent, setDataEvent] = useState([]);
   const navigate = useNavigate();
@@ -11,8 +13,20 @@ const MainPage = () => {
     const res = await axios.get("http://localhost:3000/events");
     setDataEvent(res.data);
   };
+
+  const isLoggedIn = localStorage.getItem("user");
+
   const onClickCard = (id) => {
-    navigate(`/cardpage/${id}`);
+    if (isLoggedIn) {
+      navigate(`/cardpage/${id}`);
+    } else {
+      const login = toast.error("Login First");
+
+      setTimeout(() => {
+        toast.dismiss(login);
+        navigate("/login");
+      }, 3000);
+    }
   };
   useEffect(() => {
     getApiEvents();
@@ -41,6 +55,7 @@ const MainPage = () => {
           );
         })}
       </div>
+      <Toaster />
     </div>
   );
 };
