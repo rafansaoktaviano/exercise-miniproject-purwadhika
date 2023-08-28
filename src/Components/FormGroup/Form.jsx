@@ -8,12 +8,13 @@ const Form = React.forwardRef((props, ref) => {
         onChange={props.onChange}
         type={props.type}
         id={props.inputId}
-        className={`w-[380px] h-[40px] px-[12px] py-[7px] border-[2px] rounded-md ${props.inputcss}`}
+        className={`w-[100%] h-[40px] px-[12px] py-[7px] text-slate-700 placeholder:opacity-50 border-[1px] rounded-md ${props.inputcss}`}
         ref={ref}
         pattern={props.pattern}
         src={props.src}
       />
     </div>
+    
   );
 });
 

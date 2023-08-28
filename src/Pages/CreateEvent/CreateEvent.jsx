@@ -48,7 +48,6 @@ const CreateEvent = () => {
         deskripsi_singkat: refDescLil.current.value,
         discount: refDiscount.current.value,
         userId: localStorage.getItem("user"),
-
       };
       const res = await axios.post("http://localhost:3000/events", {
         ...datas,
@@ -66,8 +65,8 @@ const CreateEvent = () => {
   if (eventData === null) return <h1>SABAR</h1>;
   console.log(eventData);
   return (
-    <div>
-      <Form
+    <div className="mt-[62px]">
+      {/* <Form
         ref={refEventname}
         labelName="Event Name"
         inputId="eventname"
@@ -156,7 +155,147 @@ const CreateEvent = () => {
         labelFor="discount"
         type="number"
       />
-      <Button onClick={onCreateEvent} buttonName="Create Event" buttoncss=""/>
+      <Button onClick={onCreateEvent} buttonName="Create Event" buttoncss=""/> */}
+      <div className="border md:px-40 flex flex-col py-10">
+        <span className="text-4xl m-auto font-bold justify-center items-center align-middle">
+          Create Your Event{" "}
+        </span>
+        <form
+          action=""
+          className="rounded-lg shadow-gray-500 py-10 px-16 grid md:grid-cols-2 gap-3"
+        >
+          <Form
+            ref={refEventname}
+            labelName="Event Name"
+            inputId="eventname"
+            labelFor="eventname"
+          />
+
+          <Form
+            ref={refDate}
+            labelName="Date"
+            inputId="date"
+            labelFor="date"
+            type="date"
+          />
+          <Form
+            ref={refTime}
+            labelName="Time"
+            inputId="time"
+            labelFor="time"
+            type="time"
+          />
+
+          <Form
+            ref={refLocation}
+            labelName="Location"
+            inputId="location"
+            labelFor="location"
+            type="text"
+          />
+
+          <Form
+            ref={refPrice}
+            labelName="Price"
+            inputId="price"
+            labelFor="price"
+            type="number"
+          />
+          <Form
+            ref={refImageLink}
+            labelName="Image Link"
+            inputId="image"
+            labelFor="image"
+            type="text"
+          />
+          <Form
+            ref={refMaxParticipate}
+            labelName="Max Participate"
+            inputId="participate"
+            labelFor="participate"
+            type="number"
+          />
+
+          <Form
+            ref={refDescLil}
+            labelName="Desc lil"
+            inputId="lildesc"
+            labelFor="lildesc"
+            type="text"
+          />
+          <Form
+            ref={refDiscount}
+            labelName="Discount"
+            inputId="discount"
+            labelFor="discount"
+            type="number"
+          />
+          <Form
+
+            labelName="Other"
+            inputId="discount"
+            labelFor="discount"
+            type="number"
+          />
+        
+
+          <select
+            required
+            ref={refCategoryEvent}
+            name="kategori_event"
+            className="  mb-6 text-sm border rounded w-full text-slate-700 placeholder:opacity-50"
+          >
+            <option>Kategori Event</option>
+            <option value="anime">Anime</option>
+            <option value="seni">Seni</option>
+            <option value="olahraga">Olahraga</option>
+            <option value="komedi">Komedi</option>
+            <option value="edukasi">Edukasi</option>
+          </select>
+
+          <select
+            required
+            ref={refCity}
+            name="kota"
+            className="mb-6 text-sm border rounded w-full py-2 px-3 text-slate-700 placeholder:opacity-50"
+          >
+            <option>Pilih Kota</option>
+            <option value="jakarta">Jakarta</option>
+            <option value="bogor">Bogor</option>
+            <option value="tangerang">Tangerang</option>
+            <option value="bekasi">Bekasi</option>
+          </select>
+
+          <select
+            required
+            ref={refEventType}
+            name="jenis_event"
+            className="mb-6 text-sm border rounded w-full py-2 px-3 text-slate-700 placeholder:opacity-50"
+          >
+            <option>Online / Ofline</option>
+            <option value="online">Online</option>
+            <option value="ofline">Ofline</option>
+          </select>
+
+          <textarea
+            required
+            ref={refDescriptionDetails}
+            name="deskripsi_detail"
+            placeholder="deskripsi detail"
+            className=""
+          >
+            Deskripsi Detail
+          </textarea>
+        <Button
+          onClick={onCreateEvent}
+          buttonName="Create Event"
+          buttoncss="bg-blue-500 text-white w-full "
+        />
+        </form>
+      </div>
+
+
+
       <Toaster />
     </div>
   );

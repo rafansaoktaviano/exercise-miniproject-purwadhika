@@ -10,6 +10,7 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import NavbarWithCTAButton from "./Components/Nav/Nav";
+import Refferalpage from "./Pages/RefferalPage/Refferalpage";
 
 function App() {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ function App() {
       const response = await axios.get(
         `http://localhost:3000/users?email=${refEmailLogin.current.value}&password=${refPasswordLogin.current.value}`
       );
-
+        
       if (!response.data.length) {
         return toast.error(
           "Login Failed, Input Your Credentials or Don't forget to fill the correct email address"
@@ -69,6 +70,7 @@ function App() {
         <Route path="/create" element={<CreateEvent />} />
         <Route path="/" element={<MainPage />} />
         <Route path="/cardpage/:eventId" element={<Cardpage />} />
+        <Route path="/test/:idReffCard" element={<Refferalpage />} />
       </Routes>
     </>
   );
