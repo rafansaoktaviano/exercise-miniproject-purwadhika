@@ -5,15 +5,15 @@
       "email": "kebon@gmail.com",
       "password": "asddsa",
       "saldo": 100000,
-      "point": 9,
+      "point": 44,
       "id": 2
     },
     {
       "nama_lengkap": "Rafansa Oktaviano",
       "email": "ravansaoktaviano@gmail.com",
       "password": "asddsa",
-      "saldo": 830000,
-      "point": 10,
+      "saldo": 2257500,
+      "point": 62,
       "id": 3
     },
     {
@@ -28,8 +28,8 @@
       "nama_lengkap": "caraka",
       "email": "caraka@gmail.com",
       "password": "asddsa",
-      "saldo": 1000000,
-      "point": 0,
+      "saldo": 665000,
+      "point": 11,
       "id": 5
     },
     {
@@ -69,7 +69,7 @@
       "jenis_event": "Online",
       "biaya": 10000,
       "image_link": "https://media.bandsintown.com/300x300/15017846.webp",
-      "max_peserta": 0,
+      "max_peserta": 1209,
       "deskripsi_detail": "ONE OK ROCK is a renowned Japanese rock band that was formed in 2005. The band consists of four talented members: Taka (vocals), Toru (guitar), Ryota (bass), and Tomoya (drums). Originally starting as a five-piece group, guitarist Alex left the band in 2009. Known for their dynamic sound, powerful performances, and emotionally charged lyrics, ONE OK ROCK has gained a massive following both in Japan and internationally. Their music seamlessly blends elements of rock, pop, alternative, and post-hardcore, creating a unique and captivating sonic experience. Over the years, ONE OK ROCK has showcased their versatility through various musical styles, experimenting with different genres while maintaining a distinct identity. Taka's soulful vocals, combined with the band's energetic instrumentals, have led to the creation of anthemic tracks that resonate deeply with fans ONE OK ROCK's journey in the music industry has been marked by significant achievements. They were managed by the talent agency Amuse and were associated with the record label A-Sketch until 2021. In a bold move, the band gained independence and founded their own label, 10969 Inc., which reflects their determination to shape their artistic direction.The band's powerful live performances have earned them a reputation as a must-see act, whether in intimate club shows or large-scale stadium concerts. Their ability to connect with audiences through their music's emotional depth and relatable themes has solidified their status as one of the leading rock bands of their generation.",
       "deskripsi_singkat": "ONE OK ROCK is a Japanese rock band formed in 2005, composed of Taka, Toru, Ryota, and Tomoya.",
       "discount": 10,
@@ -86,7 +86,7 @@
       "jenis_event": "Virtual",
       "biaya": 50000,
       "image_link": "https://lh3.googleusercontent.com/p/AF1QipPPVznUJzJSbbC-5H9gOHKIDQ7Wpnrnl7ykbBiV=w1080-h608-p-no-v0",
-      "max_peserta": 200,
+      "max_peserta": 174,
       "deskripsi_detail": "Experience the future of gaming at the Virtual Reality Gaming Expo! Dive into immersive worlds, battle fierce opponents, and explore breathtaking landscapes—all from the comfort of your own home. Our virtual reality technology will transport you to new dimensions, where you'll wield weapons, solve puzzles, and conquer challenges like never before. Whether you're a seasoned gamer or a curious explorer, the Virtual Reality Gaming Expo offers an unforgettable adventure.",
       "deskripsi_singkat": "Step into the future of gaming with virtual reality technology.",
       "discount": 20,
@@ -102,27 +102,51 @@
       "detail_lokasi": "City Park",
       "jenis_event": "Offline",
       "biaya": 150000,
-      "image_link": "https://example.com/food_festival.jpg",
-      "max_peserta": 300,
+      "image_link": "https://www.thefoodietravels.com/wp-content/uploads/2023/06/7b2381da-58cf-43cd-bcfe-d0f45aa23486.jpg",
+      "max_peserta": 298,
       "deskripsi_detail": "Indulge your taste buds at the Food Festival Extravaganza! Sample a delectable array of culinary delights from around the world. From gourmet street food to exquisite desserts, our food festival promises a gastronomic journey you won't forget. Discover new flavors, learn cooking tips from renowned chefs, and enjoy live entertainment that complements the culinary experience.",
       "deskripsi_singkat": "A culinary adventure with a variety of flavors and cuisines.",
       "discount": 15,
       "userId": "5",
       "id": 5
     }
+    
   ],
   "cetak_tiket": [
     {
+      "Price": 9000,
       "id": 2,
       "userId": 2,
       "eventId": 2,
       "kode_referal": 1232
     },
     {
-      "id": 3,
-      "userId": 3,
+      "Price": 9000,
+      "userId": "5",
       "eventId": 3,
-      "kode_referal": 12345
+      "kode_referal": "123",
+      "id": 3
+    },
+    {
+      "Price": 50000,
+      "userId": "5",
+      "eventId": 4,
+      "kode_referal": "702173",
+      "id": 4
+    },
+    {
+      "Price": 9000,
+      "userId": "5",
+      "eventId": 3,
+      "kode_referal": "805513",
+      "id": 5
+    },
+    {
+      "Price": 9000,
+      "userId": "5",
+      "eventId": 3,
+      "kode_referal": "138748",
+      "id": 6
     }
   ],
   "comments": [

@@ -35,16 +35,13 @@ const SignUp = () => {
           saldo: 1000000,
           point: 0,
         };
-        
+
         await axios.post(`http://localhost:3000/users`, { ...dataToSend });
         fetchData();
-        const loading =  toast.loading("Loading")
+        const loading = toast.loading("Loading");
         setTimeout(() => {
-          toast.dismiss(loading)
+          toast.dismiss(loading);
           toast.success("Register Success!");
-
-
-
         }, 1000);
         setTimeout(() => {
           navigate("/login");
@@ -65,9 +62,26 @@ const SignUp = () => {
   console.log(data);
   return (
     <>
-      <div className="flex justify-center items-center  h-screen">
-        <div className="border-[2px] px-[100px] py-[50px] border-black rounded-xl">
-          <h1 className="text-4xl mb-[20px]">SIGN UP</h1>
+      <div className="flex justify-center items-center w-full  h-screen ">
+        <img className="bg-blue-500 w-1/2 h-full " src="https://images.unsplash.com/photo-1565035010268-a3816f98589a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1976&q=80" >
+          {/* <div className=" bg-blue-500  shadow-2xl rounded-xl w-full h-full p-[100px]">
+            <div>
+              <h1 className="text-center text-white text-4xl mb-[50px] mt-[50px] font-bold">
+                HELLO!
+              </h1>
+              <h3 className=" text-white text-3xl leading-[50px] mb-[20px] font-semibold">
+                Register to get your free 14 days Promo!!
+              </h3>
+              <p className=" text-white opacity-80">
+                Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry, when an unknown printer took a galley of type and
+                scrambled it to make a type specimen book.
+              </p>
+            </div>
+          </div> */}
+        </img>
+        <div className=" w-2/4 border-none xl:px-[150px] sm:px-[75px]  py-[50px] border-black rounded-xl">
+          <h1 className="text-2xl mb-[20px]">SIGN UP</h1>
           <Form
             ref={refFullName}
             labelName="Fullname"
@@ -89,8 +103,14 @@ const SignUp = () => {
           <Button
             onClick={onSubmitBtn}
             buttonName="Sign Up"
-            buttoncss="px-[32px] py-[12px] border-[2px] mt-[50px] w-full border-black rounded-md mb-[20px]"
+            buttoncss="px-[32px] py-[12px] bg-blue-500 border-none mt-[50px] w-full  rounded-md mb-[20px] text-white"
           />
+          <h1>
+            Have an account ?{" "}
+            <Link to="/login">
+              <a className="text-blue-700 underline">Login</a>
+            </Link>
+          </h1>
         </div>
 
         <Toaster />

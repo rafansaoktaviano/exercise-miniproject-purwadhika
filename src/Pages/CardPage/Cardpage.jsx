@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Button from "../../Components/Button/Button";
@@ -7,6 +7,7 @@ import Form from "../../Components/FormGroup/Form";
 import toast, { Toaster } from "react-hot-toast";
 
 const Cardpage = () => {
+  const navigate = useNavigate();
   const { eventId } = useParams(); // get event Id
   const [dataEvent, setDataEvent] = useState(null); //
   const [dataUser, setDataUser] = useState(null); // all data user
@@ -14,10 +15,11 @@ const Cardpage = () => {
   const [newData, setNewData] = useState(null); // data dari local storage
   const [btnDisable, setBtnDisable] = useState(false); // set btn disable atau engga
   const [btnReff, setBtnReff] = useState(false); //  set button disable atau ga pada reff btn
-  const [reff, setReff] = useState(null);
+  const [reff, setReff] = useState([]);
 
   const [userTest, setUserTest] = useState(null);
   const [sumDiscount, setSumDiscount] = useState(null);
+  const [ticket, setTicket] = useState(null);
 
   const refCodeRefferal = useRef(); // value input code Reff
 
@@ -25,11 +27,22 @@ const Cardpage = () => {
     const event = await axios.get(`http://localhost:3000/events/${eventId}`); //get  Event Id
     const dataBase = await axios.get(`http://localhost:3000/users`); // get semua database
     const localId = await axios.get(`http://localhost:3000/users/${storeUser}`); // data user di local storage
+    const ticket = await axios.get(`http://localhost:3000/cetak_tiket`);
 
+    setTicket(ticket.data);
     setNewData(localId.data);
     setDataEvent(event.data);
     setDataUser(dataBase.data);
   };
+
+  function getRandomCode() {
+    let result = "";
+    for (let i = 0; i < 6; i++) {
+      const randomDigit = Math.floor(Math.random() * 10);
+      result += randomDigit;
+    }
+    return result;
+  }
 
   useEffect(() => {
     getApi();
@@ -45,24 +58,43 @@ const Cardpage = () => {
   const discountedPrice = (dataEvent.biaya * dataEvent.discount) / 100; // Total biaya discount
   // console.log(discountedPrice);
   // handle Code Refferal
+
+  console.log(reff);
   const handleApplyRefferal = async (e) => {
     try {
-      setSumDiscount(discountedPrice);
       setBtnReff(true);
       const refferal = await axios.get(
         // cari kode Ref di data base
         `http://localhost:3000/cetak_tiket?kode_referal=${e}`
       );
       setReff(refferal.data);
-
-      if (refferal.data.length === 0) {
-        // klo refferal kosong
-        toast.error("Refferal Invalid");
+      console.log("ref", refferal);
+      console.log("eve", eventId);
+      if (storeUser === ticket.userId) {
+        toast.error("Refferal Already Used");
+      } else if (refferal.data.length === 0) {
         setBtnReff(false);
-      } else {
+        toast.error("Invalid Refferal 1");
+      } else if (
+        refferal.data.length > 0 &&
+        refferal.data[0].eventId != eventId
+      ) {
+        // klo refferal kosong
+        setBtnReff(false);
+
+        if (refferal.data.length > 0 && refferal.data[0].eventId !== eventId) {
+          setSumDiscount(dataEvent.biaya); // Reset sumDiscount when referral is not applied
+        } else {
+          setSumDiscount(dataEvent.biaya - discountedPrice);
+        }
+        toast.error("Refferal Invalid 2");
+      } else if (
+        refferal.data[0].eventId == eventId &&
+        refferal.data.length > 0
+      ) {
         // klo user apply refferal
 
-        // console.log("reeferal", refferal.data);
+        console.log("reeferal", refferal.data);
 
         // const userss = await axios.get(
         //   `http://localhost:3000/users/${refferal.data[0].userId}`
@@ -76,11 +108,16 @@ const Cardpage = () => {
         // );
 
         // console.log(res);
-
-        setSumDiscount(dataEvent.biaya - discountedPrice);
+        if (refferal.data.length > 0) {
+          setSumDiscount(dataEvent.biaya - discountedPrice);
+        } else {
+          setSumDiscount(dataEvent.biaya); // Reset sumDiscount when referral is not applied
+        }
         console.log(dataEvent);
         // console.log(response);
         toast.success("Code Refferal Applied");
+      } else {
+        toast.error("Refferal test");
       }
     } catch (error) {
       console.log(">>>", error);
@@ -91,10 +128,11 @@ const Cardpage = () => {
   // handle Ticket Buy
   const handleBuyTicket = async (e) => {
     try {
-      const refferal1 = await axios.get(
-        `http://localhost:3000/cetak_tiket?kode_referal=${e}` // get refferal code array
-      );
-      // console.log("Reff 1  >>>", refferal1);
+      // const refferal1 = await axios.get(
+      //   `http://localhost:3000/cetak_tiket?kode_referal=${e}` // get refferal code array
+      // );
+      // // console.log("Reff 1  >>>", refferal1);
+
       if (dataEvent.max_peserta === 0) {
         toast.error("FULL BOOKED");
       } else if (!storeUser && dataEvent.max_peserta > 0) {
@@ -104,7 +142,7 @@ const Cardpage = () => {
         toast.success("Buy Success");
       } else if (
         newData.saldo >= dataEvent.biaya &&
-        reff === null &&
+        reff.length === 0 &&
         dataEvent.max_peserta > 0
       ) {
         // kalo reff kosong dan saldo > biaya
@@ -137,6 +175,7 @@ const Cardpage = () => {
           console.log(res.data);
           console.log(response.data);
           getApi();
+          navigate(`/test/${eventId}`);
 
           toast.success("Buy Success");
         }, 1000);
@@ -147,9 +186,29 @@ const Cardpage = () => {
       ) {
         // klo pake code reff
 
+        const checkReff = await axios.get(
+          // cari kode Ref di data base
+          `http://localhost:3000/cetak_tiket?kode_referal=${refCodeRefferal.current.value}`
+        );
+
+        const userReff = await axios.get(
+          `http://localhost:3000/users/${checkReff.data[0].userId}`
+        );
+
+        console.log(userReff);
+
+        const test = { ...userReff.data, point: userReff.data.point + 1 };
+        const re2 = await axios.put(
+          `http://localhost:3000/users/${checkReff.data[0].userId}`,
+          test
+        );
+        // const resp = await axios.put();
+
+        // console.log(resp);
+        console.log(newData);
         const updatedUser = {
           ...newData,
-          saldo: newData.saldo - dataEvent.biaya,
+          saldo: newData.saldo - sumDiscount,
           point: newData.point + 1,
         };
 
@@ -170,21 +229,35 @@ const Cardpage = () => {
           updatedParticipate
         );
 
+        const setTicketData = {
+          Price: sumDiscount,
+          userId: storeUser,
+          eventId: dataEvent.id,
+          kode_referal: getRandomCode(),
+        };
+
+        const printTicket = await axios.post(
+          `http://localhost:3000/cetak_tiket`,
+          setTicketData
+        );
+
         const loading = toast.loading("Loading");
         setBtnDisable(true);
         setTimeout(() => {
           toast.dismiss(loading);
           toast.success("Buy Success");
-
+          console.log("test2", re2.data);
           console.log(response.data);
+          console.log(printTicket.data);
 
           getApi();
         }, 1000);
+        setTimeout(() => {
+          navigate(`/test/${eventId}`);
+        }, 3000);
       } else if (newData.saldo <= dataEvent.biaya) {
         // klo saldo nya kurang
         toast.error("Insufficient Saldo");
-      } else {
-        toast.error("Login First ");
       }
     } catch (error) {
       console.log(error);
@@ -195,6 +268,8 @@ const Cardpage = () => {
   console.log("dataUser:", dataUser);
   // console.log("storeUser:", storeUser);
   console.log("NewDATA:", newData);
+  console.log("Reff", reff);
+  console.log(eventId);
 
   return (
     <>
@@ -210,7 +285,7 @@ const Cardpage = () => {
           </div>
         </div>
 
-        <div className=" p-[50px] flex mt-[20px] justify-between bg-cyan-700 rounded-3xl">
+        <div className=" p-[50px] flex mt-[20px] justify-between bg-blue-500 rounded-3xl">
           <div className="">
             <h1 className=" text-xl text-white ">{dataEvent.kota}</h1>
             <h1 className="text-white">{dataEvent.detail_lokasi}</h1>
@@ -238,7 +313,7 @@ const Cardpage = () => {
 
             <Button
               buttonName="Apply Refferal"
-              buttoncss="w-full bg-cyan-700 rounded-xl text-white font-bold mt-0 mb-[50px]"
+              buttoncss="w-full bg-blue-500 rounded-xl text-white font-bold mt-0 mb-[50px]"
               onClick={() => handleApplyRefferal(refCodeRefferal.current.value)}
               disabled={btnReff}
             />
@@ -249,15 +324,23 @@ const Cardpage = () => {
 
         <div className="mt-[50px] mb-[30px] flex justify-between items-center">
           <h1 className="text-xl">Price :</h1>
-          {dataEvent.biaya === 0 ? (
+          {dataEvent.biaya == 0 ? (
             <>
               <h1 className="text-xl">Free</h1>
             </>
           ) : (
             <div className="">
               <h1 className="text-xl text-green-600">
-                {reff === null ? dataEvent.biaya.toLocaleString() : sumDiscount}
-                {/* Rp. {dataEvent.biaya.toLocaleString()} */}
+                {reff.length === 0 ? (
+                  <>
+                    <div>{dataEvent?.biaya.toLocaleString()}</div>
+                  </>
+                ) : (
+                  <>
+                    <div className="text-red-700 line-through">{dataEvent?.biaya.toLocaleString()}</div>
+                    <div> {sumDiscount?.toLocaleString()}</div>
+                  </>
+                )}
               </h1>
             </div>
           )}
@@ -280,7 +363,7 @@ const Cardpage = () => {
 
         <Button
           buttonName="Buy Ticket"
-          buttoncss="w-full bg-cyan-700 rounded-xl text-white font-bold mt-0 mb-[50px]"
+          buttoncss="w-full bg-blue-500 rounded-xl text-white font-bold mt-0 mb-[50px]"
           onClick={() => handleBuyTicket(eventId)}
           disabled={btnDisable}
         />
